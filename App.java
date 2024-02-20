@@ -11,7 +11,6 @@ public class App {
         String input = sc.nextLine(); 
         sc.close();
 
-        try {
             char operation = detectOper(input);          
             String[] numbers = parse(input);
             boolean isArabic = Roman.isArabic(numbers);
@@ -32,29 +31,19 @@ public class App {
                 toRoman = Roman.toRoman(out);
                 System.out.println(toRoman);
             }
-
-        } catch (IOException e) {
-            System.out.println("You have to enter two operands (from 0 to 10 of arabic) or (from I to X of roman) and one math operator between them.");
-        } catch (ArithmeticException e) {
-            System.out.println("You can't divide by zero.");
-        } catch (UnsupportedOperationException e) {
-            System.out.println("Math operation not found.");
-        } catch (NumberFormatException e) {
-            System.out.println("You have to enter only roman or arabic numb.");
-        } 
     }
 
         public static String[] parse(String input) throws IOException{
             String inputWithoutSpaces = input.replaceAll(" ","");
             String[] inputNumbsArr = inputWithoutSpaces.split("\\+|\\*|/|-");
             if (inputNumbsArr.length !=2){
-                throw new IOException();
+                throw new IOException("You have to enter two operands (from 0 to 10 of arabic) or (from I to X of roman) and one math operator between them.");
             } else {
                 return inputNumbsArr;
             }
         }
         
-        public static char detectOper(String str) throws UnsupportedOperationException, IOException {
+        public static char detectOper(String str) throws IOException {
  
             Pattern pattern = Pattern.compile("\\+|-|/|\\*");
             Matcher matcher = pattern.matcher(str);
@@ -66,7 +55,7 @@ public class App {
             while (matcher.find()) {
                 ++count;
                 if (count != 1) {
-                    throw new IOException();
+                    throw new IOException("You have to enter one math operator.");
                 } else {
                     str2 = matcher.group();   
                     out = str2.charAt(0);
@@ -79,12 +68,12 @@ public class App {
             int out = 0;
             int [] numbers = new int[numbs.length];
             if (numbs.length != 2){
-                throw new IOException();
+                throw new IOException("You have to enter two operands (from 0 to 10 of arabic) or (from I to X of roman) and one math operator between them.");
             } else {
                 for (int i = 0; i < numbs.length; i++) {
                     numbers[i] = Integer.parseInt(numbs[i]);
             } 
-                if ((0 < numbers[0]) && (numbers[0] < 11) && (0 < numbers[1]) && (numbers[0] < 11)) {
+                if ((0 <= numbers[0]) && (numbers[0] < 11) && (0 <= numbers[1]) && (numbers[0] < 11)) {
                     switch (oper) {
                         case '+':
                             out = numbers[0] + numbers[1];
@@ -92,7 +81,7 @@ public class App {
                         case '-':
                             out = numbers[0] - numbers[1];
                             if (isRoman == true && out < 1) {
-                                throw new IOException();
+                                throw new IOException("The Roman system has no numbers less than 1.");
                             } else {
                                 break;
                             }
@@ -101,14 +90,14 @@ public class App {
                             break;
                         default:
                             if (numbers[1] == 0){
-                                throw new ArithmeticException();
+                                throw new ArithmeticException("You cant devide by zero.");
                             } else {
                             out = numbers[0] / numbers[1];
                             break;
                             }
                     }  
                 } else {
-                    throw new IOException();
+                    throw new IOException("You have to enter two operands (from 0 to 10 of arabic) or (from I to X of roman) and one math operator between them.");
                 } 
             }
             return out;
@@ -183,9 +172,9 @@ public class App {
         public static boolean detectException(boolean arabic, boolean roman) throws NumberFormatException{
             boolean out = true;
             if (arabic == true && roman == true) {
-                throw new NumberFormatException();
+                throw new NumberFormatException("You have to enter only roman or arabian.");
             } else if (arabic == false && roman == false) {
-                throw new NumberFormatException();
+                throw new NumberFormatException("You have to enter only roman or arabian.");
             } else {
                 return out;
             }
